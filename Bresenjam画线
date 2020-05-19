@@ -1,0 +1,55 @@
+#include <GL/glut.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void init()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0, 200.0, 0.0, 150.0);
+}
+
+void display()
+{
+	int x0 = 10, y0 = 0, x1 = 100, y1 = 40,dx,dy,x,y,i;
+	float k, e;
+	dx = x1 - x0, dy = y1 - y0, k = (float)dy / (float)dx;
+	e = -0.5;
+	x = x0, y = y0;
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0, 0.0, 0.0);
+	glPointSize(2.5);
+	glBegin(GL_POINTS);
+	glVertex2i(x, y);
+	for (i = 0; i <= dx; i++)
+	{
+		glVertex2i(x, y);
+		x = x + 1;
+		e = e + k;
+		if (e>0)
+		{
+			y++;
+			e = e - 1;
+		}
+	}
+
+
+	glEnd();
+
+	glFlush();
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowPosition(300, 200);
+	glutInitWindowSize(300, 300);
+	glutCreateWindow("Bresenham Draw Line");
+	init();
+	glutDisplayFunc(display);
+	glutMainLoop();
+	return 0;
+}
