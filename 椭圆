@@ -1,0 +1,86 @@
+#include <GL/glut.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void init()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-100.0, 100.0, -100.0, 100.0);
+}
+
+void eightpoint(int x,int y) 
+{
+	glVertex2i(x, y); glVertex2i(y, x);
+	glVertex2i(-x, y);glVertex2i(y, -x);
+	glVertex2i(x, -y);glVertex2i(-y, x);
+	glVertex2i(-x, -y);glVertex2i(-y, -x);
+}
+
+void ellipespixel(int x, int y)
+{
+	glVertex2i(x, y); 
+	glVertex2i(-x, y);
+	glVertex2i(x, -y);
+	glVertex2i(-x, -y); 
+}
+
+void display()
+{
+	//int x, y;  
+	double d1, d2, a = 80, b = 20,x,y;
+	x = 0; y = b;
+	d1 = b * b + a * a * (-b + 0.25);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0, 0.0, 0.0);
+	glLineWidth(1);
+	glBegin(GL_POINTS);
+	ellipespixel(x, y);
+	while (b * b * (x + 1) < a * a * (y - 0.5))  //生成上半部分椭圆
+	{
+		if (d1 < 0)
+		{
+			d1 += b * b * (2 * x + 3); 
+			x++;
+		}
+
+		 else{
+			d1 += (b * b * (2 * x + 3) + a * a * (-2 * y + 2));
+				 x++;  
+				 y--;
+		 }
+		ellipespixel(x, y);
+    }
+	d2 = b * b * (x + 0.5) * (x + 0.5) + a * a * (y - 1) * (y - 1) - a * a * b * b;
+	while (y > 0)  // 生成下半部分椭圆
+	{
+		if (d2 < 0) {
+			d2 += b * b * (2 * x + 2) + a * a * (-2 * y + 3);
+			x++; 
+			y--;
+		}
+		else {
+			d2 += a * a * (-2 * y + 3); 
+		     y--;
+		}
+		ellipespixel(x, y);
+	}
+	glEnd();
+	glFlush();
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowPosition(300, 200);
+	glutInitWindowSize(300, 300);
+	glutCreateWindow("椭圆");
+	init();
+	//glOrtho(-17.0, 17.0, -18.0, 17.0, -1.0, 1.0);
+	glutDisplayFunc(display);
+	glutMainLoop();
+	return 0;
+}
