@@ -1,0 +1,51 @@
+#include <GL/glut.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void init()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0, 200.0, 0.0, 150.0);
+}
+
+void display()
+{
+	int x0 = 10, y0 = 0, x1 = 100, y1 = 40,dx,dy,i,ep;
+	float x, y, xIn, yIn; 
+	dx = x1 - x0;
+	dy = y1 - y0;
+	x = x0;   
+	y = y0;
+	if (abs(dx) > abs(dy))  ep = abs(dx);
+	else  ep = abs(dy);
+	xIn = (float)dx / (float)ep;
+	yIn = (float)dy/(float)ep;
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0, 0.0, 0.0);
+	glPointSize(2.5);
+	glBegin(GL_POINTS);
+	glVertex2i(x, y);
+	for (i = 0; i <= ep; i++) {
+		glVertex2i(int(x+0.5), int(y+0.5));
+		x += xIn;
+		y += yIn;
+	}
+	glEnd();
+	glFlush();
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowPosition(300, 200);
+	glutInitWindowSize(300, 300);
+	glutCreateWindow("DDA Draw Line");
+	init();
+	glutDisplayFunc(display);
+	glutMainLoop();
+	return 0;
+}
