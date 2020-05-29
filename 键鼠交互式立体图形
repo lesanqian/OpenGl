@@ -1,0 +1,261 @@
+#include<iostream>
+#include <math.h>
+#include<Windows.h>
+#include <GL/glut.h>
+
+using namespace std;
+
+//GLsizei winWidth = 600, winHeight = 600;
+
+int x01=0, y01=0, x02=0, y02=0,z02=0,sf=0;
+int moveSpeed = 1;
+
+
+void init()
+{
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+ 
+}
+
+
+void drawCube(void) {
+
+    //绘制正方体的面
+    glColor3f(1.0, 0, 0);//红色
+    glBegin(GL_QUADS);
+    //---1---
+    glNormal3f(-1, 0, 0);//设置点的法向量
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glEnd();
+    //---2---
+    glColor3f(1.0, 1.0, 0);//黄色
+    glBegin(GL_QUADS);
+    glNormal3f(1, 0, 0);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glEnd();
+    //---3---
+    glColor3f(1.0, 0, 1.0);//紫色
+    glBegin(GL_QUADS);
+    glNormal3f(0, 1, 0);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glEnd();
+    //---4---
+    glColor3f(0, 1.0, 1.0);//青色
+    glBegin(GL_QUADS);
+    glNormal3f(0, -1, 0);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glEnd();
+    //---5---
+    glColor3f(1.0, 0.5, 0);//土黄色
+    glBegin(GL_QUADS);
+    glNormal3f(0, 0, 1);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glEnd();
+    //---6---
+    glColor3f(1.0, 0, 0.5);
+    glBegin(GL_QUADS);
+    glNormal3f(0, 0, -1);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glEnd();
+
+    //draw
+    glColor3f(0, 0, 0);
+    glLineWidth(2.0f);
+    //绘制正方体的边
+    glBegin(GL_LINES);
+    //---1---
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, 0.5, 0.5);
+    //---2---
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    //---3---
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, 0.5);
+    //---4---
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glEnd();
+    glFlush();
+}
+
+
+void myDisplay(void)
+{
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_PROJECTION);//投影变换
+    glLoadIdentity();
+    gluPerspective(75, 1, 1, 400);
+    glMatrixMode(GL_MODELVIEW);//模型视图
+    glLoadIdentity();
+    gluLookAt(0, 0, 6, 0, 0, 0, 0.5, 1, 0.5);
+
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glRotatef(0.0f + x02, 0.0f + y02, 0.0f + z02, -1.0f);//旋转
+    glScalef(1 + sf, 1 + sf, 1 + sf);//伸缩
+    glTranslatef(3 + x01, 0.0f + y01, 0.0f);//平移
+    glLineWidth(1.0f);//设置边的像素宽，默认为1.0f
+    drawCube();
+
+    glFlush();
+}
+
+
+
+void ProcessSpecialKeyboead(int key, int x, int y)//键盘交互物体平移
+{
+	if (GLUT_KEY_UP == key)
+	{
+		printf("up\n");
+		y01 += moveSpeed;
+		y02 += moveSpeed;
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+	if (GLUT_KEY_DOWN == key)
+	{
+		printf("down\n");
+		y01 -= moveSpeed;
+		y02 -= moveSpeed;
+		glClear(GL_COLOR_BUFFER_BIT);
+		glFlush();
+	}
+	if (GLUT_KEY_LEFT == key)
+	{
+		printf("left\n");
+		x01 -= moveSpeed;
+		x02 -= moveSpeed;
+		glClear(GL_COLOR_BUFFER_BIT);
+		glFlush();
+	}
+	if (GLUT_KEY_RIGHT == key)
+	{
+		printf("right\n");
+		x01 += moveSpeed;
+		x02 += moveSpeed;
+		glClear(GL_COLOR_BUFFER_BIT);
+		glFlush();
+	}
+   
+    myDisplay();
+}
+
+void myKeyboard(unsigned char key, int x, int y)//键盘交互物体旋转
+{
+    if (key == 'A' || key == 'a')
+    {
+        x02 += 2;
+        y02 += 2;
+        z02 += 2;
+        printf("高速正转\n");
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+    if (key == 'S' || key == 's')
+    {
+        x02 -= 2;
+        y02 -= 2;
+        z02 -= 2;
+        printf("高速反转\n");
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+    if (key == 'W' || key == 'w')
+    {
+        x02 += 1;
+        y02 += 1;
+        z02 += 1;
+        printf("低速正转\n");
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+    if (key == 'd' || key == 'D')
+    {
+        x02 -= 1;
+        y02 -= 1;
+        z02 -= 1;
+        printf("低速反转\n");
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+    myDisplay();
+}
+
+void myMouse(int button, int state, int x, int y)//鼠标交互物体伸缩
+{
+    if (state == GLUT_DOWN)
+    {
+        if (button == GLUT_LEFT_BUTTON)
+        {
+            printf("缩小\n");
+            sf--;
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+        if(button==GLUT_RIGHT_BUTTON)
+        {
+            printf("扩大\n");
+            sf++;
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+    }
+    myDisplay();
+}
+
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowPosition(300, 200);
+    glutInitWindowSize(400, 400);
+    glutCreateWindow("交互式立方体");
+    init();
+    glutDisplayFunc(myDisplay);
+    glutSpecialFunc(ProcessSpecialKeyboead);
+    glutKeyboardFunc(myKeyboard);
+    glutMouseFunc(myMouse);
+    glutMainLoop();
+    return 0;
+}
